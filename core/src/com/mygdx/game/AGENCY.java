@@ -34,8 +34,8 @@ public class AGENCY extends ApplicationAdapter implements InputProcessor {
 	ArrayList<Sprite> hexspritelist;
 	ArrayList<Sprite> unitspritelist;
 	ArrayList<Sprite> fogspritelist;
-	Texture texture_turn;
-	Sprite sprite_turn;
+	Texture texture_turngreen,texture_turnred;
+	Sprite sprite_turngreen,sprite_turnred;
 	hex cursor;
 	hex select;
 	ArrayList<Sprite> selectspritelist;
@@ -66,9 +66,10 @@ public class AGENCY extends ApplicationAdapter implements InputProcessor {
 		texture_unitgreen = new Texture("unit_green.png");
 		texture_unitred = new Texture("unit_red.png");
 		texture_select = new Texture("verthex_select.png");
-		texture_turn = new Texture("point.png");
-		sprite_turn = new Sprite(texture_turn,d*4,d*4);
-		sprite_turn.setCenter(0, 0);
+		texture_turngreen = new Texture("turn_green200.png");
+		texture_turnred = new Texture("turn_red.png");
+		sprite_turngreen = new Sprite(texture_turngreen,scr_width,scr_height);
+		sprite_turnred = new Sprite(texture_turnred,scr_width,scr_height);
 		info_font = new BitmapFont();
 		info_font.setColor(Color.WHITE);
 		info_str = "";
@@ -112,7 +113,6 @@ public class AGENCY extends ApplicationAdapter implements InputProcessor {
 								else if((Integer)fromserver==1001 || (Integer)fromserver==1000){
 									turn = (Integer)fromserver-1000;
 									log("turn received: "+turn);
-									sprite_turn.setCenter(0, (side==turn ? 1:0)*500);
 								}
 							}
 							else if (fromserver.getClass().getName()=="com.mygdx.game.Hexlist"){
@@ -154,7 +154,8 @@ public class AGENCY extends ApplicationAdapter implements InputProcessor {
 			tempsprite.draw(batch);
 		}
 		info_font.draw(batch,info_str,20,100);
-		sprite_turn.draw(batch);
+		if (side==turn){sprite_turngreen.draw(batch);
+		}else{sprite_turnred.draw(batch);}
 		batch.end();
 	}
 	
