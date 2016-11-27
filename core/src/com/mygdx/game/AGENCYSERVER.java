@@ -106,16 +106,24 @@ class gameinstance{
 			}
 		}
 		public void run(){
-			int i=0;
 			while(true){
 				Object fromclient=null;
 				try {
 					fromclient = input.readObject();
 				} catch (ClassNotFoundException e) {
 					log("Error 2: "+e.toString());
-				} catch (IOException e){
-					if(i==0){log("Error 2.5: "+e.toString());e.printStackTrace();}
-					i=1;
+				} catch (IOException e){//client disconnected
+					log("Error 2.5: "+e.toString());
+					try {
+						input.close();
+						output.close();
+						socket.close();
+						opponent.output.writeObject(-1);
+						opponent.input.close();
+						opponent.output.close();
+						opponent.socket.close();
+						break;
+					} catch (IOException e1) {log("Error 2.6: "+e1.toString());break;}
 				}
 				if (fromclient != null) {
 					//DO STUFF WITH INPUT

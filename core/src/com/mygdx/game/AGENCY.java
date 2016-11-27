@@ -79,7 +79,7 @@ public class AGENCY extends ApplicationAdapter implements InputProcessor {
 		port=33333;
 		
 		try {
-			clientsocket = new Socket("192.168.1.223", port);
+			clientsocket = new Socket("192.168.0.102", port);
 			output = new ObjectOutputStream(clientsocket.getOutputStream());
 			output.flush();
 			input = new ObjectInputStream(clientsocket.getInputStream());
@@ -113,6 +113,10 @@ public class AGENCY extends ApplicationAdapter implements InputProcessor {
 								else if((Integer)fromserver==1001 || (Integer)fromserver==1000){
 									turn = (Integer)fromserver-1000;
 									log("turn received: "+turn);
+								}
+								else if((Integer)fromserver==-1){
+									log("kill signal received");
+									Gdx.app.exit();
 								}
 							}
 							else if (fromserver.getClass().getName()=="com.mygdx.game.Hexlist"){
@@ -325,8 +329,9 @@ public class AGENCY extends ApplicationAdapter implements InputProcessor {
 	}
 	private void passturn(){
 		log("turnpassed");
+		turn=1-turn;
 		try {
-			output.writeObject(1-turn+1000);
+			output.writeObject(turn+1000);
 			output.writeObject(hexlist);
 		} catch (IOException e) {
 			log("Error 5: "+e.toString());
